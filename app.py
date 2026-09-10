@@ -2,64 +2,59 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-st.set_page_config(page_title='Vision22 Growth Command Center',page_icon='🌎',layout='wide')
+st.set_page_config(page_title='Vision22 Market Study',page_icon='🌎',layout='wide')
 
-st.markdown('''<style>
-[data-testid="stMetric"]{background:#f5f5f5;padding:18px;border-radius:15px}
-</style>''',unsafe_allow_html=True)
+st.markdown('''<style>[data-testid="stMetric"]{background:#f5f5f5;padding:18px;border-radius:15px}</style>''',unsafe_allow_html=True)
 
-st.title('🌎 مركز قيادة نمو Vision22')
-st.caption('USA & Canada B2B Growth Intelligence | Sales Command Center | Revenue Strategy')
+st.title('🌎 دراسة دخول سوق أمريكا وكندا - Vision22')
+st.caption('B2B Digital Marketing Market Analysis | Services Strategy | Growth Plan')
 
-menu=st.sidebar.radio('القائمة الرئيسية',[
-'الرئيسية','تحليل السوق','Buyer Intelligence','الخدمات والباقات','Sales Pipeline','Revenue Forecast','خطة 90 يوم'])
+menu=st.sidebar.radio('الأقسام',['الرئيسية','أقوى نقطة دخول','الباقات والخدمات','نسب النجاح','Email Campaign','SWOT Analysis','المخاطر والحلول'])
+
+packages=pd.DataFrame({
+'Package':['Complete B2B Marketing Department','Performance Growth System','Lead Generation Engine','International B2B Expansion','Digital Authority System','Website & Conversion System','Growth Foundation'],
+'Success %':[70,82,90,65,75,85,88],
+'Opportunity %':[85,90,95,70,80,92,86],
+'Price Level':['Premium','High','High','Premium','Medium','Premium','Medium']
+})
 
 if menu=='الرئيسية':
-    st.header('Executive Dashboard')
     a,b,c,d=st.columns(4)
-    a.metric('الأسواق','USA + Canada')
-    b.metric('القطاعات','5 Priority Industries')
-    c.metric('Retainer','$7K - $50K')
-    d.metric('هدف 90 يوم','5-10 Clients')
-    df=pd.DataFrame({'Industry':['Manufacturing','Construction','B2B SaaS','Distribution','Professional Services'],'Opportunity':[95,90,88,82,75]})
-    st.plotly_chart(px.bar(df,x='Industry',y='Opportunity'),use_container_width=True)
+    a.metric('أفضل دخول','B2B Lead Generation')
+    b.metric('أقوى قطاعات','Manufacturing + SaaS')
+    c.metric('أفضل Retainer','$7K-$30K/mo')
+    d.metric('فرصة 90 يوم','High')
+    st.dataframe(packages,use_container_width=True)
 
-elif menu=='تحليل السوق':
-    st.header('تحليل السوق الأمريكي والكندي')
-    st.subheader('USA')
-    st.write('Texas | Florida | California | Illinois | North Carolina')
-    st.subheader('Canada')
-    st.write('Ontario | Alberta | British Columbia')
+elif menu=='أقوى نقطة دخول':
+    st.header('استراتيجية الدخول الأقوى')
+    st.write('1- Manufacturing Companies')
+    st.write('2- Construction & Engineering')
+    st.write('3- B2B SaaS Companies')
+    st.write('4- Distribution Companies')
+    st.write('سبب الاختيار: قيمة عميل عالية + احتياج مستمر للـ Leads + قدرة دفع قوية')
 
-elif menu=='Buyer Intelligence':
-    st.header('ICP & Buyer Intelligence')
-    st.write('Decision Makers: CEO | Founder | VP Sales | Marketing Director | Business Development')
-    score=st.slider('Company Opportunity Score',0,100,85)
-    st.metric('Opportunity Score',f'{score}/100')
-
-elif menu=='الخدمات والباقات':
+elif menu=='الباقات والخدمات':
     st.header('Vision22 Service Packages')
-    packages=['Complete B2B Marketing Department','Performance Growth System','Lead Generation Engine','International B2B Expansion','Digital Authority System','Website & Conversion System','Growth Foundation']
-    st.table(pd.DataFrame({'Packages':packages}))
+    st.table(packages[['Package','Price Level']])
 
-elif menu=='Sales Pipeline':
-    st.header('Sales Command Center')
-    df=pd.DataFrame({'Stage':['Prospects','Contacted','Replies','Meetings','Proposals','Won'],'Count':[5000,800,150,40,15,5]})
-    st.plotly_chart(px.funnel(df,x='Count',y='Stage'),use_container_width=True)
+elif menu=='نسب النجاح':
+    st.header('ترتيب الباقات من الأعلى فرصة للأقل')
+    st.plotly_chart(px.bar(packages,x='Package',y='Success %'),use_container_width=True)
+    st.dataframe(packages.sort_values('Success %',ascending=False))
 
-elif menu=='Revenue Forecast':
-    st.header('Revenue Forecast')
-    accounts=st.number_input('Target Accounts',100,100000,5000)
-    reply=st.slider('Reply Rate %',1,20,5)
-    close=st.slider('Close Rate %',1,50,15)
-    retainer=st.number_input('Monthly Retainer',5000,100000,15000)
-    clients=accounts*reply/100*close/100
-    a,b=st.columns(2)
-    a.metric('Expected Clients',round(clients))
-    b.metric('Expected MRR',f'${clients*retainer:,.0f}')
+elif menu=='Email Campaign':
+    st.header('أفضل 10 رسائل Email Hooks')
+    emails=['Growth Opportunity Audit','Increase Qualified B2B Leads','Your Competitor Digital Gap','90 Day Pipeline Growth Plan','Market Expansion Strategy','Free Digital Growth Review','Revenue Growth Opportunity','B2B Acquisition Improvement','Website Conversion Analysis','Strategic Growth Partnership']
+    st.table(pd.DataFrame({'Email Subject':emails}))
+
+elif menu=='SWOT Analysis':
+    st.write('Strengths: Full marketing team capability, international delivery')
+    st.write('Weaknesses: New market trust building')
+    st.write('Opportunities: High B2B demand in USA/Canada')
+    st.write('Threats: Competition, long sales cycles')
 
 else:
-    st.header('خطة 90 يوم GTM')
-    st.write('الشهر الأول: ICP + Database + Campaign Setup')
-    st.write('الشهر الثاني: Outreach + Meetings + Optimization')
-    st.write('الشهر الثالث: Closing + Scaling + Partnerships')
+    st.header('المشاكل والحلول')
+    data=pd.DataFrame({'Problem':['عدم الثقة','طول دورة البيع','منافسة عالية'],'Solution':['Case Studies + Proof','Nurturing + Follow Up','Niche Positioning']})
+    st.table(data)
